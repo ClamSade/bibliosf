@@ -20,7 +20,7 @@ class Emprunt
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_prevue = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_retour = null;
 
     #[ORM\ManyToOne(inversedBy: 'emprunts')]

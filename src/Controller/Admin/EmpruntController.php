@@ -3,8 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Emprunt;
+use App\Form\EmpruntEditType;
 use App\Form\EmpruntType;
 use App\Repository\EmpruntRepository;
+// use DateInterval;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +19,7 @@ class EmpruntController extends AbstractController
     public function index(EmpruntRepository $empruntRepository): Response
     {
         return $this->render('admin/emprunt/index.html.twig', [
-            'emprunts' => $empruntRepository->findAll(),
+            'emprunts' => $empruntRepository->findBy([], ['date_retour' =>  'ASC', 'date_emprunt'   =>  'ASC'])
         ]);
     }
 
@@ -29,6 +31,11 @@ class EmpruntController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $dateEmprunt = clone $emprunt->getDateEmprunt();
+            $datePrevue = date_add($dateEmprunt, new \DateInterval('P14D'));
+            $emprunt->setDatePrevue($datePrevue);
+
             $empruntRepository->save($emprunt, true);
 
             return $this->redirectToRoute('app_admin_emprunt_index', [], Response::HTTP_SEE_OTHER);
@@ -51,7 +58,7 @@ class EmpruntController extends AbstractController
     #[Route('/{id}/edit', name: 'app_admin_emprunt_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Emprunt $emprunt, EmpruntRepository $empruntRepository): Response
     {
-        $form = $this->createForm(EmpruntType::class, $emprunt);
+        $form = $this->createForm(EmpruntEditType::class, $emprunt);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

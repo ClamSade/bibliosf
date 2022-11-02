@@ -1,4 +1,19 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    {# 
+        La balise set permet de définir des varibles dans twig. Pour changer la valeur d'une variable, il faut réutiliser le balise 'set'.
+        La variable form.vars.value permet de récupérer la variable utilisée pour les données du formulaire (un objet d'une classe entité).
+    #}
+
+    {% set emprunt = form.vars.value %}
+    {% if form.vars.value.id is not null %}
+        <ul class="list-group mb-3">
+            <li class="list-group-item"><strong>Livre : </strong>{{ emprunt.livre.titre }}<strong> de : </strong><em>{{ emprunt.livre.auteur.identite }}</em></li>
+            <li class="list-group-item"><strong>Abonné : </strong>{{ emprunt.abonne.pseudo }}</li>
+        </ul>
+    {% endif %}
+
+    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+    <a href="{{ path('app_admin_emprunt_index') }}" class="btn btn-secondary"><i class="fa fa-reply"></i></a>
+
 {{ form_end(form) }}
