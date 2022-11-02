@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des catégories{% endblock %}
+
+{% block body %}
+    <h1>Liste des catégories</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libellé</th>
+                <th>Mots clés</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorie in categories %}
+            <tr>
+                <td>{{ categorie.id }}</td>
+                <td>{{ categorie.libelle }}</td>
+                <td>{{ categorie.motsCles }}</td>
+                <td>{{ categorie.livres|length }}</td>
+                <td>
+                    <a href="{{ path('app_admin_categorie_show', {'id': categorie.id}) }}"><i class="fa fa-eye"></i></a>
+                    <a href="{{ path('app_admin_categorie_edit', {'id': categorie.id}) }}"><i class="fa fa-edit"></i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucune catégories enregistré</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_categorie_new') }}" class="btn btn-secondary"><i class="fa fa-plus"></i> Ajouter une catégorie</a>
+{% endblock %}

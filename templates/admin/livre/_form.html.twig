@@ -1,0 +1,12 @@
+{# 
+    {{ form(form) }}
+#}
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="d-flex justify-content-between">
+        <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+        <a href="{{ path('app_admin_livre_index') }}" class="btn btn-secondary"><i class="fa fa-reply"></i></a>
+    </div>
+{{ form_end(form) }}
+
