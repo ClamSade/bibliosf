@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[Route('/admin/livre')]
 class LivreController extends AbstractController
@@ -56,6 +57,21 @@ class LivreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $fichier = $form->get('couverture')->getData();
+
+            if($fichier) //Si un fichier a été uploadé...
+            {
+                $nomFichier = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
+
+                $slugger = new AsciiSlugger();
+                $nomFichier = $slugger->slug($nomFichier);
+                $nomFichier .= '_' . uniqid();
+                $nomFichier .= '.' . $fichier->guessExtension();
+                $fichier->move('img', $nomFichier); //enregistre le fichier uploadé dans le dossier 'public/img'
+                $livre->setCouverture($nomFichier);
+            }
+            
             $livreRepository->save($livre, true);
 
             return $this->redirectToRoute('app_admin_livre_index', [], Response::HTTP_SEE_OTHER);

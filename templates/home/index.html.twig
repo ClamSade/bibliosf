@@ -7,17 +7,7 @@
     <div class="card-columns">
     {% for livre in livres %}
 
-        <div class="card">
-            <img class="card-img-top" src="" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">{{ livre.titre }}</h5>
-                <h6 class="card-title">Auteur : {{ livre.auteur.identite }}</h6>
-                <p class="card-text">{{ livre.resume }}</p>
-            </div>
-            <div class="card-footer">
-                <small class="text-muted"></small>
-            </div>
-        </div>
+        {{  include('livre/vignette.html.twig') }}
 
     {% endfor %}
     </div>
